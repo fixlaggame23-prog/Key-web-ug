@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lấy Key Siêu Công Nghệ</title>
+<style>
+    /* Nền động gradient */
+    body {
+        margin: 0;
+        font-family: 'Segoe UI', sans-serif;
+        background: linear-gradient(-45deg, #0f2027, #203a43, #2c5364, #0f2027);
+        background-size: 400% 400%;
+        animation: gradientBG 10s ease infinite;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        color: white;
+    }
+    @keyframes gradientBG {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+    /* Thẻ chứa nội dung */
+    .container {
+        background: rgba(0, 0, 0, 0.6);
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 0 25px rgba(0, 255, 255, 0.8), 0 0 50px rgba(0, 255, 255, 0.5);
+        backdrop-filter: blur(10px);
+        width: 350px;
+        text-align: center;
+        animation: fadeIn 1s ease-in-out;
+    }
+    @keyframes fadeIn {
+        from { transform: scale(0.5); opacity: 0; }
+        to { transform: scale(1); opacity: 1; }
+    }
+
+    h1 {
+        font-size: 24px;
+        margin-bottom: 15px;
+        text-shadow: 0 0 10px cyan, 0 0 20px cyan;
+    }
+
+    .input-box {
+        padding: 10px;
+        margin: 10px 0;
+        width: 100%;
+        border-radius: 8px;
+        border: 2px solid cyan;
+        background: transparent;
+        color: white;
+        font-size: 16px;
+        text-align: center;
+        outline: none;
+        transition: 0.3s;
+    }
+    .input-box:focus {
+        box-shadow: 0 0 10px cyan;
+    }
+
+    .btn {
+        background: linear-gradient(45deg, #00ffff, #0088ff);
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+        border-radius: 8px;
+        margin: 5px 0;
+        width: 100%;
+        transition: 0.3s;
+    }
+    .btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 15px cyan;
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    /* Bảng thành công */
+    .success {
+        padding: 15px;
+        background: rgba(0, 255, 0, 0.2);
+        border: 2px solid lime;
+        border-radius: 8px;
+        margin-top: 15px;
+        animation: successAnim 0.8s ease-in-out;
+    }
+    @keyframes successAnim {
+        from { transform: scale(0.5); opacity: 0; }
+        to { transform: scale(1); opacity: 1; }
+    }
+
+    /* Hiệu ứng hạt bay */
+    canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: -1;
+    }
+</style>
+</head>
+<body>
+
+<canvas id="particles"></canvas>
+
+<div class="container">
+    <h1>🔐 Cổng Lấy Key</h1>
+    <input type="text" id="keyInput" class="input-box" placeholder="Nhập key của bạn">
+    <button class="btn" onclick="getKey()">Lấy Key</button>
+    <div id="linkSection" class="hidden">
+        <p>Nhấn vào link dưới để lấy key:</p>
+        <a id="keyLink" href="https://link4sub.com/" target="_blank" style="color: cyan;">➡ Vượt link tại đây</a>
+    </div>
+    <button class="btn" onclick="verifyKey()">Xác Nhận</button>
+    <div id="successMessage" class="hidden success">
+        ✅ Thành công! Đang vào web chính...
+    </div>
+</div>
+
+<script>
+    let realKey = "ABC123"; // Key thật
+
+    function getKey() {
+        document.getElementById("linkSection").classList.remove("hidden");
+    }
+
+    function verifyKey() {
+        let userKey = document.getElementById("keyInput").value;
+        if (userKey === realKey) {
+            document.getElementById("successMessage").classList.remove("hidden");
+            setTimeout(() => {
+                window.location.href = "https://fixlaggame23-prog.github.io/Dang-khoi/";
+            }, 2000);
+        } else {
+            alert("❌ Key không đúng!");
+        }
+    }
+
+    // Hiệu ứng hạt bay
+    const canvas = document.getElementById('particles');
+    const ctx = canvas.getContext('2d');
+    let particlesArray;
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    class Particle {
+        constructor(x, y, directionX, directionY, size, color) {
+            this.x = x;
+            this.y = y;
+            this.directionX = directionX;
+            this.directionY = directionY;
+            this.size = size;
+            this.color = color;
+        }
+        draw() {
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
+            ctx.fillStyle = this.color;
+            ctx.fill();
+        }
+        update() {
+            if (this.x > canvas.width || this.x < 0) this.directionX = -this.directionX;
+            if (this.y > canvas.height || this.y < 0) this.directionY = -this.directionY;
+            this.x += this.directionX;
+            this.y += this.directionY;
+            this.draw();
+        }
+    }
+
+    function init() {
+        particlesArray = [];
+        let numberOfParticles = 80;
+        for (let i = 0; i < numberOfParticles; i++) {
+            let size = Math.random() * 3 + 1;
+            let x = Math.random() * (window.innerWidth - size * 2);
+            let y = Math.random() * (window.innerHeight - size * 2);
+            let directionX = (Math.random() - 0.5) * 2;
+            let directionY = (Math.random() - 0.5) * 2;
+            let color = 'cyan';
+            particlesArray.push(new Particle(x, y, directionX, directionY, size, color));
+        }
+    }
+
+    function animate() {
+        requestAnimationFrame(animate);
+        ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+        for (let i = 0; i < particlesArray.length; i++) {
+            particlesArray[i].update();
+        }
+    }
+
+    init();
+    animate();
+
+    window.addEventListener('resize', function(){
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        init();
+    });
+</script>
+
+</body>
+</html>
